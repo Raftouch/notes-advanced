@@ -1,13 +1,38 @@
+import { useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
+import type { NoteData, RawNote, Tag } from "../types/note";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-export default function NoteForm() {
+interface NoteFormProps {
+  onSubmit: (data: NoteData) => void;
+}
+
+export default function NoteForm({ onSubmit }: NoteFormProps) {
+  const titleRef = useRef<HTMLInputElement>(null);
+  const markdownRef = useRef<HTMLTextAreaElement>(null);
+
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    onSubmit({
+      title: titleRef.current!.value,
+      markdown: markdownRef.current!.value,
+      tags: [],
+    });
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="flex gap-8">
         <div className="w-1/2 flex flex-col space-y-2 pb-8">
           <label htmlFor="title">Title</label>
           <input
+            ref={titleRef}
             className="border border-gray-300 rounded min-w-[2px] py-[6px] px-3 text-gray-500"
             type="text"
             id="title"
@@ -18,12 +43,28 @@ export default function NoteForm() {
         </div>
         <div className="w-1/2 space-y-2">
           <label htmlFor="tags">Tags</label>
-          <CreatableSelect id="tags" name="tags" isMulti required />
+          <CreatableSelect
+            id="tags"
+            name="tags"
+            value={selectedTags.map((tag) => {
+              return { label: tag.label, value: tag.id };
+            })}
+            onChange={(tags) => {
+              setSelectedTags(
+                tags.map((tag) => {
+                  return { label: tag.label, id: tag.value };
+                })
+              );
+            }}
+            isMulti
+            required
+          />
         </div>
       </div>
       <div className="flex flex-col space-y-2">
         <label htmlFor="markdown">Body</label>
         <textarea
+          ref={markdownRef}
           className="border rounded text-gray-500 py-[6px] px-3"
           id="markdown"
           name="markdown"
