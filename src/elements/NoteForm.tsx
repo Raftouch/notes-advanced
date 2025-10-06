@@ -1,20 +1,25 @@
-import { useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useRef, useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 import type { NoteData, RawNote, Tag } from "../types/note";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { v4 as uuidV4 } from "uuid";
 
 interface NoteFormProps {
   onSubmit: (data: NoteData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 }
 
-export default function NoteForm({ onSubmit }: NoteFormProps) {
+export default function NoteForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+}: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-
+  const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
-  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -22,8 +27,10 @@ export default function NoteForm({ onSubmit }: NoteFormProps) {
     onSubmit({
       title: titleRef.current!.value,
       markdown: markdownRef.current!.value,
-      tags: [],
+      tags: selectedTags,
     });
+
+    navigate("..");
   }
 
   return (
@@ -37,16 +44,24 @@ export default function NoteForm({ onSubmit }: NoteFormProps) {
             type="text"
             id="title"
             name="title"
-            value="Add title here..."
+            // defaultValue="Add title here..."
             required
           />
         </div>
         <div className="w-1/2 space-y-2">
           <label htmlFor="tags">Tags</label>
           <CreatableSelect
+            onCreateOption={(label) => {
+              const newTag = { id: uuidV4(), label };
+              onAddTag(newTag);
+              setSelectedTags((prev) => [...prev, newTag]);
+            }}
             id="tags"
             name="tags"
             value={selectedTags.map((tag) => {
+              return { label: tag.label, value: tag.id };
+            })}
+            options={availableTags.map((tag) => {
               return { label: tag.label, value: tag.id };
             })}
             onChange={(tags) => {
@@ -68,7 +83,7 @@ export default function NoteForm({ onSubmit }: NoteFormProps) {
           className="border rounded text-gray-500 py-[6px] px-3"
           id="markdown"
           name="markdown"
-          value="Add some text..."
+          // defaultValue="Add some text..."
           required
           rows={15}
         />
