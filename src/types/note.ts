@@ -10,7 +10,7 @@ export type NoteData = {
 
 export type RawNote = {
   id: string;
-} & NoteData;
+} & RawNoteData;
 
 export type RawNoteData = {
   title: string;
