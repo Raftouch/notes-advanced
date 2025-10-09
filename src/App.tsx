@@ -3,14 +3,18 @@ import NewNotePage from "./pages/NewNotePage";
 import EditNotePage from "./pages/EditNotePage";
 import NoteList from "./pages/NoteListPage";
 import useLocalStorage from "./hooks/useLocalStorage";
-import type { Tag } from "./types/note";
+import type { Note, Tag } from "./types/note";
 
 function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+  const [notes, setNotes] = useLocalStorage<Note[]>("NOTES", []);
 
   return (
     <Routes>
-      <Route path="/" element={<NoteList availableTags={tags} />} />
+      <Route
+        path="/"
+        element={<NoteList availableTags={tags} notes={notes} />}
+      />
       <Route path="/new" element={<NewNotePage />} />
       <Route path="/:id">
         <Route index element={<h1>Show</h1>} />

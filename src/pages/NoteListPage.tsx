@@ -1,15 +1,29 @@
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
-import type { Tag } from "../types/note";
-import { useState } from "react";
+import type { Note, Tag } from "../types/note";
+import { useMemo, useState } from "react";
 
 interface NoteListProps {
   availableTags: Tag[];
+  notes: Note[];
 }
 
-export default function NoteList({ availableTags }: NoteListProps) {
+export default function NoteList({ availableTags, notes }: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
+
+  const filteredNotes = useMemo(() => {
+    return notes.filter((note) => {
+      return (
+        title === "" ||
+        (note.title.toLowerCase().includes(title.toLowerCase()) &&
+          (selectedTags.length === 0 ||
+            selectedTags.every((tag) =>
+              note.tags.some((noteTag) => noteTag.id === tag.id)
+            )))
+      );
+    });
+  }, [title, selectedTags, notes]);
 
   return (
     <div className="p-10">
@@ -67,6 +81,12 @@ export default function NoteList({ availableTags }: NoteListProps) {
           </div>
         </div>
       </form>
+
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {filteredNotes.map((note) => (
+          <li id={note.title}>{note.title}</li>
+        ))}
+      </ul>
     </div>
   );
 }
