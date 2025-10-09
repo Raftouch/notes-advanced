@@ -96,7 +96,7 @@ export default function NoteForm({
         />
         <div className="w-1/2 bg-red-500 h-12 flex justify-center items-center text-white rounded-md cursor-pointer">
           <Link to="..">
-            <input type="button" value="Cancel" />
+            <input className="cursor-pointer" type="button" value="Cancel" />
           </Link>
         </div>
       </div>
