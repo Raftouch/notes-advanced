@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import type { Note, Tag } from "../types/note";
 import { useMemo, useState } from "react";
+import NoteElement from "../elements/Note";
 
 interface NoteListProps {
   availableTags: Tag[];
@@ -84,7 +85,9 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredNotes.map((note) => (
-          <li id={note.title}>{note.title}</li>
+          <li id={note.title}>
+            <NoteElement note={note} />
+          </li>
         ))}
       </ul>
     </div>
