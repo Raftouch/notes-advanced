@@ -8,14 +8,14 @@ export default function NewNotePage() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
 
-  const notesWithTags = useMemo(() => {
-    return notes.map((note) => {
-      return {
-        ...notes,
-        tags: tags.filter((tag) => note.tagIds.includes(tag.id)),
-      };
-    });
-  }, [notes, tags]);
+  // const notesWithTags = useMemo(() => {
+  //   return notes.map((note) => {
+  //     return {
+  //       ...note,
+  //       tags: tags.filter((tag) => note.tagIds.includes(tag.id)),
+  //     };
+  //   });
+  // }, [notes, tags]);
 
   function onCreateNote({ tags, ...data }: NoteData) {
     setNotes((prevNotes) => {
