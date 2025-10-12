@@ -5,6 +5,7 @@ import NoteList from "./pages/NoteListPage";
 import useLocalStorage from "./hooks/useLocalStorage";
 import type { RawNote, Tag } from "./types/note";
 import { useMemo } from "react";
+import NoteLayout from "./layouts/NoteLayout";
 
 function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
@@ -26,7 +27,7 @@ function App() {
         element={<NoteList availableTags={tags} notes={notesWithTags} />}
       />
       <Route path="/new" element={<NewNotePage />} />
-      <Route path="/:id">
+      <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
         <Route index element={<h1>Show</h1>} />
         <Route path="edit" element={<EditNotePage />} />
       </Route>
