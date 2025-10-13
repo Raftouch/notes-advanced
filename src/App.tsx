@@ -6,6 +6,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import type { RawNote, Tag } from "./types/note";
 import { useMemo } from "react";
 import NoteLayout from "./layouts/NoteLayout";
+import ShowNotePage from "./pages/ShowNotePage";
 
 function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
@@ -28,7 +29,7 @@ function App() {
       />
       <Route path="/new" element={<NewNotePage />} />
       <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-        <Route index element={<h1>Show</h1>} />
+        <Route index element={<ShowNotePage />} />
         <Route path="edit" element={<EditNotePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
