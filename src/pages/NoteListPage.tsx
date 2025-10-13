@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import type { Note, Tag } from "../types/note";
 import { useMemo, useState } from "react";
-import NoteElement from "../elements/Note";
+import NoteCard from "../elements/NoteCard";
 
 interface NoteListProps {
   availableTags: Tag[];
@@ -71,9 +71,9 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
               })}
               onChange={(tags) => {
                 setSelectedTags(
-                  tags.map((tag) => {
-                    return { label: tag.label, id: tag.value };
-                  })
+                  tags
+                    ? tags.map((tag) => ({ label: tag.label, id: tag.value }))
+                    : []
                 );
               }}
               isMulti
@@ -85,8 +85,8 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredNotes.map((note) => (
-          <li id={note.title}>
-            <NoteElement note={note} />
+          <li id={note.id}>
+            <NoteCard note={note} />
           </li>
         ))}
       </ul>
