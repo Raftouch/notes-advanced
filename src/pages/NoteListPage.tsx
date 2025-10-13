@@ -85,7 +85,7 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredNotes.map((note) => (
-          <li id={note.title}>
+          <li id={note.id}>
             <NoteElement note={note} />
           </li>
         ))}
