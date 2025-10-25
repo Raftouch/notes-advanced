@@ -31,7 +31,7 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
       <div className="flex items-center justify-between">
         <h1 className="pb-5 font-bold text-lg">Notes</h1>
 
-        <div className="flex gap-5 mb-5">
+        <div className="flex gap-2 mb-5">
           <Link to="/new">
             <button className="py-2 px-4 bg-blue-500 text-white rounded-md cursor-pointer">
               Create
@@ -39,7 +39,7 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
           </Link>
           {/* <Link to="/new"> */}
           <button className="py-2 px-4 bg-orange-500 text-white rounded-md cursor-pointer">
-            Edit
+            Edit tags
           </button>
           {/* </Link> */}
         </div>
