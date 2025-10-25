@@ -94,11 +94,11 @@ export default function NoteForm({
           type="submit"
           value="Submit"
         />
-        <div className="w-1/2 bg-red-500 h-12 flex justify-center items-center text-white rounded-md cursor-pointer">
-          <Link to="..">
+        <Link to=".." className="w-1/2">
+          <div className="bg-red-500 h-12 flex justify-center items-center text-white rounded-md cursor-pointer">
             <input className="cursor-pointer" type="button" value="Cancel" />
-          </Link>
-        </div>
+          </div>
+        </Link>
       </div>
     </form>
   );
