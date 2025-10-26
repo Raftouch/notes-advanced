@@ -29,6 +29,9 @@ export default function EditNotePage() {
     <div className="p-10">
       <h1 className="pb-5 font-bold text-lg">Edit Note</h1>
       <NoteForm
+        title={note.title}
+        markdown={note.markdown}
+        tags={note.tags}
         onSubmit={(data) => onUpdateNote(note.id, data)}
         onAddTag={addTag}
         availableTags={tags}
