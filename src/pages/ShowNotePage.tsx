@@ -1,8 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useNote } from "../layouts/NoteLayout";
 
-export default function ShowNotePage() {
+interface ShowNoteProps {
+  onRemove: (id: string) => void;
+}
+
+export default function ShowNotePage({ onRemove }: ShowNoteProps) {
   const note = useNote();
+  const navigate = useNavigate();
 
   return (
     <div className="p-5 space-y-10">
@@ -27,7 +32,13 @@ export default function ShowNotePage() {
               Edit
             </button>
           </Link>
-          <button className="py-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-md cursor-pointer">
+          <button
+            onClick={() => {
+              onRemove(note.id);
+              navigate("/");
+            }}
+            className="py-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-md cursor-pointer"
+          >
             Delete
           </button>
           <Link to="/">

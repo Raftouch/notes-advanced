@@ -21,6 +21,10 @@ function App() {
     });
   }, [notes, tags]);
 
+  function onRemoveNote(id: string) {
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+  }
+
   return (
     <Routes>
       <Route
@@ -29,7 +33,7 @@ function App() {
       />
       <Route path="/new" element={<NewNotePage />} />
       <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-        <Route index element={<ShowNotePage />} />
+        <Route index element={<ShowNotePage onRemove={onRemoveNote} />} />
         <Route path="edit" element={<EditNotePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
