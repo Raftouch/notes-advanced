@@ -1,8 +1,7 @@
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
-import type { NoteData, RawNote, Tag } from "../types/note";
-import useLocalStorage from "../hooks/useLocalStorage";
+import type { NoteData, Tag } from "../types/note";
 import { v4 as uuidV4 } from "uuid";
 
 interface NoteFormProps {
