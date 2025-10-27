@@ -35,6 +35,18 @@ function App() {
     setTags((prev) => [...prev, tag]);
   }
 
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
   function onRemoveNote(id: string) {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
@@ -57,7 +69,16 @@ function App() {
       />
       <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
         <Route index element={<ShowNotePage onRemove={onRemoveNote} />} />
-        <Route path="edit" element={<EditNotePage />} />
+        <Route
+          path="edit"
+          element={
+            <EditNotePage
+              onSubmit={onUpdateNote}
+              onAddTag={addTag}
+              availableTags={tags}
+            />
+          }
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
