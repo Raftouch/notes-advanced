@@ -3,10 +3,11 @@ import NewNotePage from "./pages/NewNotePage";
 import EditNotePage from "./pages/EditNotePage";
 import NoteList from "./pages/NoteListPage";
 import useLocalStorage from "./hooks/useLocalStorage";
-import type { RawNote, Tag } from "./types/note";
+import type { NoteData, RawNote, Tag } from "./types/note";
 import { useMemo } from "react";
 import NoteLayout from "./layouts/NoteLayout";
 import ShowNotePage from "./pages/ShowNotePage";
+import { v4 as uuidV4 } from "uuid";
 
 function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
@@ -21,6 +22,31 @@ function App() {
     });
   }, [notes, tags]);
 
+  function onCreateNote({ tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return [
+        ...prevNotes,
+        { ...data, id: uuidV4(), tagIds: tags.map((tag) => tag.id) },
+      ];
+    });
+  }
+
+  function addTag(tag: Tag) {
+    setTags((prev) => [...prev, tag]);
+  }
+
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
   function onRemoveNote(id: string) {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
@@ -31,10 +57,28 @@ function App() {
         path="/"
         element={<NoteList availableTags={tags} notes={notesWithTags} />}
       />
-      <Route path="/new" element={<NewNotePage />} />
+      <Route
+        path="/new"
+        element={
+          <NewNotePage
+            onSubmit={onCreateNote}
+            onAddTag={addTag}
+            availableTags={tags}
+          />
+        }
+      />
       <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
         <Route index element={<ShowNotePage onRemove={onRemoveNote} />} />
-        <Route path="edit" element={<EditNotePage />} />
+        <Route
+          path="edit"
+          element={
+            <EditNotePage
+              onSubmit={onUpdateNote}
+              onAddTag={addTag}
+              availableTags={tags}
+            />
+          }
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

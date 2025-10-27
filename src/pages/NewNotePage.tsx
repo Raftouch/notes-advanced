@@ -1,32 +1,24 @@
 import NoteForm from "../elements/NoteForm";
-import useLocalStorage from "../hooks/useLocalStorage";
-import type { NoteData, RawNote, Tag } from "../types/note";
-import { v4 as uuidV4 } from "uuid";
+import type { NoteData, Tag } from "../types/note";
 
-export default function NewNotePage() {
-  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
-  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+interface NewNoteProps {
+  onSubmit: (data: NoteData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
+}
 
-  function onCreateNote({ tags, ...data }: NoteData) {
-    setNotes((prevNotes) => {
-      return [
-        ...prevNotes,
-        { ...data, id: uuidV4(), tagIds: tags.map((tag) => tag.id) },
-      ];
-    });
-  }
-
-  function addTag(tag: Tag) {
-    setTags((prev) => [...prev, tag]);
-  }
-
+export default function NewNotePage({
+  onSubmit,
+  onAddTag,
+  availableTags,
+}: NewNoteProps) {
   return (
     <div className="p-10">
       <h1 className="pb-5 font-bold text-lg">New Note</h1>
       <NoteForm
-        onSubmit={onCreateNote}
-        onAddTag={addTag}
-        availableTags={tags}
+        onSubmit={onSubmit}
+        onAddTag={onAddTag}
+        availableTags={availableTags}
       />
     </div>
   );
