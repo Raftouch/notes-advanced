@@ -8,9 +8,16 @@ import EditTagsModal from "../elements/Modal";
 interface NoteListProps {
   availableTags: Tag[];
   notes: Note[];
+  onUpdateTag: (id: string, label: string) => void;
+  onRemoveTag: (id: string) => void;
 }
 
-export default function NoteList({ availableTags, notes }: NoteListProps) {
+export default function NoteList({
+  availableTags,
+  notes,
+  onUpdateTag,
+  onRemoveTag,
+}: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,6 +61,8 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
         <EditTagsModal
           availableTags={availableTags}
           handleClose={() => setIsModalOpen(false)}
+          onUpdateTag={onUpdateTag}
+          onRemoveTag={onRemoveTag}
         />
       ) : null}
 
