@@ -3,6 +3,7 @@ import ReactSelect from "react-select";
 import type { Note, Tag } from "../types/note";
 import { useMemo, useState } from "react";
 import NoteCard from "../elements/NoteCard";
+import EditTagsModal from "../elements/Modal";
 
 interface NoteListProps {
   availableTags: Tag[];
@@ -12,6 +13,7 @@ interface NoteListProps {
 export default function NoteList({ availableTags, notes }: NoteListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
@@ -38,12 +40,22 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
             </button>
           </Link>
           {/* <Link to="/new"> */}
-          <button className="py-2 px-4 bg-orange-500 text-white rounded-md cursor-pointer">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="py-2 px-4 bg-orange-500 text-white rounded-md cursor-pointer"
+          >
             Edit tags
           </button>
           {/* </Link> */}
         </div>
       </div>
+
+      {isModalOpen ? (
+        <EditTagsModal
+          availableTags={availableTags}
+          handleClose={() => setIsModalOpen(false)}
+        />
+      ) : null}
 
       <form>
         <div className="flex gap-5">
